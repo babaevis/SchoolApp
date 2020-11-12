@@ -36,6 +36,7 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
             if(rs.next()){
                 Group group = new Group();
                 group.setId(rs.getInt("group_id"));
+                group.setName(rs.getString("group_name"));
 
                 return Optional.of(group);
             }
@@ -65,7 +66,8 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
 
         try {
             statement = con.prepareStatement(query);
-            statement.setInt(1, (int)group.getId());
+            statement.setString(1, group.getName());
+            statement.setInt(2, (int)group.getId());
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();

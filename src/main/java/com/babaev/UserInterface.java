@@ -1,7 +1,9 @@
 package com.babaev;
 
 import com.babaev.dao.CrudDao;
+import com.babaev.dao.GroupDaoImpl;
 import com.babaev.dao.StudentDaoImpl;
+import com.babaev.model.Group;
 import com.babaev.model.Student;
 
 import java.sql.Connection;
@@ -53,7 +55,8 @@ public class UserInterface {
     }
 
     private void printMenu() {
-        System.out.println("\n                     MAIN MENU\n=====================================================");
+        System.out.println("\n                     MAIN MENU\n" +
+                            "=====================================================");
         System.out.println("1.Show all students");
         System.out.println("2.Add new student");
         System.out.println("3.Delete student by id");
@@ -70,6 +73,7 @@ public class UserInterface {
     private void addNewStudent() {
         Student student = new Student();
         CrudDao studentDao = new StudentDaoImpl(con);
+        CrudDao groupDao = new GroupDaoImpl(con);
 
         System.out.println("Enter first name of new student:");
         String firstName = scanName();
@@ -77,11 +81,18 @@ public class UserInterface {
         String lastName = scanName();
         System.out.println("Enter patronimyc of new student");
         String patronimyc = scanName();
+        System.out.println("Enter group id of new student");
+        int grouId = scanNumber();
 
+        Group group = new Group();
+        group.setId(grouId);
+
+        student.setGroup(group);
         student.setFirstName(firstName);
         student.setLastName(lastName);
         student.setPatronimyc(patronimyc);
         studentDao.save(student);
+
         System.out.println("-------------------------");
         System.out.println(lastName + " " + firstName + " " + patronimyc + " added");
         System.out.println("-------------------------");
@@ -94,17 +105,19 @@ public class UserInterface {
             System.out.println("--------------------------");
 
         } else {
-            System.out.println("---------------------------------");
-            System.out.println("Firstname | Lastname | Patronymic");
-            System.out.println("---------------------------------");
+            System.out.println("--------------------------------------------");
+            System.out.println("Firstname | Lastname | Patronymic | Group_id");
+            System.out.println("--------------------------------------------");
 
             for (int i = 0; i < students.size(); i++) {
-                System.out.print(i + 1 + ". " + students.get(i).getFirstName() + "   ");
+                System.out.print(i + 1 + ". " + students.get(i).getFirstName() + "     ");
                 System.out.print(students.get(i).getLastName()+ "   ");
-                System.out.println(students.get(i).getPatronimyc());
+                System.out.print(students.get(i).getPatronimyc() + "     ");
+                System.out.println(students.get(i).getGroup().getId());
             }
         }
     }
+
     private void deleteStudentById(){
             System.out.println("Enter the id of the student:");
             int id = scanNumber();
@@ -113,21 +126,13 @@ public class UserInterface {
             studentDao.deleteById(id);
 
             System.out.println("Student successfully deleted\n----------------------------");
-        }
+    }
+
     private String scanName(){
         return scanner.next();
     }
+
     private int scanNumber(){
-        int input = -1;
-
-        while(input < 0){
-            input = scanner.nextInt();
-
-            if(input < 0 ){
-                System.out.println("Id should be positive. Try again...");
-            }
-        }
-
-        return input;
+        return scanner.nextInt();
     }
 }

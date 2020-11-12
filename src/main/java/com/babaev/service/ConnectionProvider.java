@@ -9,7 +9,9 @@ import java.sql.SQLException;
  */
 public class ConnectionProvider {
 
-    public static Connection openConnection(){
+    private ConnectionProvider(){}
+
+    public static Connection getConnection(){
         String url = "jdbc:postgresql://localhost:5432/";
         String username = "postgres";
         String password = "123";

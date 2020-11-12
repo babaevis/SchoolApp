@@ -56,6 +56,7 @@ public class SqlScriptRunner {
         try {
             statement = con.createStatement();
             statement.execute(query);
+            statement.close();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

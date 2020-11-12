@@ -52,7 +52,7 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
 
     @Override
     public void save(Student student) {
-        String query = "INSERT INTO students (first_name, last_name, patronymic, birth_date) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO students (first_name, last_name, patronymic, birth_date, group_id) VALUES (?, ?, ?, ?, ?)";
 
         try {
             statement = con.prepareStatement(query);
@@ -60,10 +60,10 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
             statement.setString(2, student.getLastName());
             statement.setString(3, student.getPatronimyc());
             statement.setDate(4, student.getBirthdate());
+            statement.setInt(5, (int)student.getGroup().getId());
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-
         }
     }
     @Override
@@ -118,8 +118,9 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
                 student.setLastName(rs.getString("last_name"));
                 student.setBirthdate(rs.getDate("birth_date"));
                 student.setPatronimyc(rs.getString("patronymic"));
-                Group group = new Group(rs.getInt("group_id"));
-                student.setGroup(group);
+                CrudDao groupDao = new GroupDaoImpl(con);
+                Optional<Group> group = groupDao.findById(rs.getInt("group_id"));
+                student.setGroup(group.get());
                 students.add(student);
             }
         } catch (SQLException throwables) {

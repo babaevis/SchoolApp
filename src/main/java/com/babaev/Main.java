@@ -1,10 +1,15 @@
 package com.babaev;
 
+import com.babaev.dao.CrudDao;
+import com.babaev.dao.GroupDaoImpl;
+import com.babaev.model.Group;
 import com.babaev.service.ConnectionProvider;
+import com.babaev.service.GroupDataGenerator;
 import com.babaev.service.SqlScriptRunner;
 
 import java.io.File;
 import java.sql.Connection;
+import java.util.List;
 
 /**
  * @author Islam Babaev
@@ -12,7 +17,7 @@ import java.sql.Connection;
 public class Main {
 
     public static void main(String[] args) {
-        Connection con = ConnectionProvider.openConnection();
+        Connection con = ConnectionProvider.getConnection();
         makeInitialSetup(con);
 
         UserInterface uI = new UserInterface(con);
@@ -24,6 +29,13 @@ public class Main {
         SqlScriptRunner sqlScriptRunner = new SqlScriptRunner(tables, con);
 
         sqlScriptRunner.runScript();
+        List<Group> groups = GroupDataGenerator.generateGroups();
+        saveGeneratedData(groups, con);
+    }
+
+    private static void saveGeneratedData(List<Group> groups, Connection con){
+        CrudDao groupDao = new GroupDaoImpl(con);
+        groups.forEach(groupDao::save);
     }
 }
 
