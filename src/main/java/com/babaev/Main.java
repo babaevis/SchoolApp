@@ -28,8 +28,8 @@ private static final String SCRIPT = "src/main/resources/tables.sql";
     private static void makeInitialSetup(Connection con){
         File tables = new File(SCRIPT);
         SqlScriptRunner sqlScriptRunner = new SqlScriptRunner(tables, con);
-
         sqlScriptRunner.runScript();
+
         List<Group> groups = GroupDataGenerator.generateGroups();
         saveGroups(groups, con);
     }
