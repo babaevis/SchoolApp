@@ -12,7 +12,7 @@ import java.sql.Connection;
 import java.util.List;
 
 class Main {
-private static final String SCRIPT = "src/main/resources/tables.sql";
+    private static final String SCRIPT = "src/main/resources/tables.sql";
 
     public static void main(String[] args) {
         Connection con = ConnectionProvider.getConnection();
