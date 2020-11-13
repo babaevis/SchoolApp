@@ -11,9 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * @author Islam Babaev
- */
 public class GroupDaoImpl implements CrudDao<Group, Long> {
     private PreparedStatement statement;
     private ResultSet rs;

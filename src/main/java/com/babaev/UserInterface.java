@@ -15,9 +15,6 @@ import java.util.Scanner;
 
 import static java.lang.System.*;
 
-/**
- * @author Islam Babaev
- */
 public class UserInterface {
     private final Scanner scanner;
     private final Connection con;

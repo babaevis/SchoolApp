@@ -3,9 +3,6 @@ package com.babaev.model;
 
 import java.sql.Date;
 
-/**
- * @author Islam Babaev
- */
 public class Student {
     private long id;
     private String firstName;

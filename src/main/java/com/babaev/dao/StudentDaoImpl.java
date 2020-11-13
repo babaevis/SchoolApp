@@ -10,9 +10,6 @@ import java.sql.SQLException;
 import java.sql.Date;
 import java.util.*;
 
-/**
- * @author Islam Babaev
- */
 public class StudentDaoImpl implements CrudDao<Student, Long> {
     private PreparedStatement statement;
     private ResultSet rs;

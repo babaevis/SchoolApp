@@ -3,9 +3,6 @@ package com.babaev.model;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Islam Babaev
- */
 public class Group {
     private long id;
     private String name;

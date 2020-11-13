@@ -11,9 +11,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.util.List;
 
-/**
- * @author Islam Babaev
- */
 public class Main {
 private static final String SCRIPT = "src/main/resources/tables.sql";
 

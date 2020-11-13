@@ -8,9 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**
- * @author Islam Babaev
- */
 public class SqlScriptRunner {
     private final Connection con;
     private final File script;

@@ -5,9 +5,6 @@ import com.babaev.model.Group;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Islam Babaev
- */
 public class GroupDataGenerator {
     private GroupDataGenerator(){
 

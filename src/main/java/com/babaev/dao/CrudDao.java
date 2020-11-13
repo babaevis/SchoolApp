@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * @author Islam Babaev
- */
 public interface CrudDao<T, ID> {
     Optional<T> findById(ID id);
     void save(T model);
