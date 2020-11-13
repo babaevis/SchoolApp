@@ -15,16 +15,16 @@ import java.util.Scanner;
 
 import static java.lang.System.*;
 
-public class UserInterface {
-    private final Scanner scanner;
-    private final Connection con;
+class UserInterface {
+    private static Scanner scanner;
+    private static Connection con;
 
-    public UserInterface(Connection con) {
-        this.con = con;
-        scanner = new Scanner(in);
+    private UserInterface(){
     }
 
-    public void runInterface() {
+    public static void runInterface(Connection connection) {
+        con = connection;
+        scanner = new Scanner(in);
         boolean exit = false;
 
         while (!exit) {
@@ -55,7 +55,7 @@ public class UserInterface {
         }
     }
 
-    private void printMenu() {
+    private static void printMenu() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -70,13 +70,13 @@ public class UserInterface {
         out.println("--> Enter 1-4 to select operation. '0' to exit <--");
     }
 
-    private void findStudents() {
+    private static void findStudents() {
         StudentDaoImpl studentDao = new StudentDaoImpl(con);
         List<Student> students = studentDao.findAll();
         printStudents(students);
     }
 
-    private void addNewStudent() {
+    private static void addNewStudent() {
         Student student = new Student();
         CrudDao<Student, Long> studentDao = new StudentDaoImpl(con);
 
@@ -116,7 +116,7 @@ public class UserInterface {
         out.println("-----------------------------------");
     }
 
-    private void printStudents(List<Student> students) {
+    private static void printStudents(List<Student> students) {
         if (students.isEmpty()) {
             out.println("--------------------------");
             out.println("       No students");
@@ -145,7 +145,7 @@ public class UserInterface {
         out.println(result.toString());
     }
 
-    private void deleteStudentById(){
+    private static void deleteStudentById(){
         String userAnswer = null;
         while(!(isValid(userAnswer))){
             out.println("Enter id of the student:");
@@ -157,7 +157,7 @@ public class UserInterface {
         out.println("Student #" + userAnswer + " successfully deleted\n----------------------------");
     }
 
-    private boolean isValid(String str){
+    private static boolean isValid(String str){
         if(str == null)
             return false;
         for(int i = 0; i < str.length(); i++){

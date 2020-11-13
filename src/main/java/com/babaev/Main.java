@@ -11,7 +11,7 @@ import java.io.File;
 import java.sql.Connection;
 import java.util.List;
 
-public class Main {
+class Main {
 private static final String SCRIPT = "src/main/resources/tables.sql";
 
     public static void main(String[] args) {
@@ -25,8 +25,7 @@ private static final String SCRIPT = "src/main/resources/tables.sql";
         CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
         groups.forEach(groupDao::save);
 
-        UserInterface uI = new UserInterface(con);
-        uI.runInterface();
+        UserInterface.runInterface(con);
     }
 }
 
