@@ -9,15 +9,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SqlScriptRunner {
-    private final Connection con;
-    private final File script;
+    private static Connection con;
 
-    public SqlScriptRunner(File script, Connection con) {
-        this.script = script;
-        this.con = con;
+    private SqlScriptRunner(){
     }
 
-    public void runScript() {
+    public static void runScript(File script, Connection connection) {
+        con = connection;
         if(!script.exists()) {
             throw new IllegalArgumentException("File not found");
         }
@@ -47,7 +45,7 @@ public class SqlScriptRunner {
         }
     }
 
-    private void executeQuery(String query){
+    private static void executeQuery(String query){
         Statement statement = null;
 
         try {

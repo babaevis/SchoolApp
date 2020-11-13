@@ -16,10 +16,7 @@ private static final String SCRIPT = "src/main/resources/tables.sql";
 
     public static void main(String[] args) {
         Connection con = ConnectionProvider.getConnection();
-        File tables = new File(SCRIPT);
-
-        SqlScriptRunner sqlScriptRunner = new SqlScriptRunner(tables, con);
-        sqlScriptRunner.runScript();
+        SqlScriptRunner.runScript(new File(SCRIPT), con);
 
         List<Group> groups = GroupDataGenerator.generateGroups();
         CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
