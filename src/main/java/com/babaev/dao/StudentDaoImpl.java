@@ -40,10 +40,8 @@ public class StudentDaoImpl implements CrudDao<Student, Long> {
 
                 Student student = new Student(id, firstname, lastname, patronimyc, birthdate);
                 GroupDaoImpl groupDao = new GroupDaoImpl(con);
-                Optional<Group> opt = groupDao.findById(groupId);
-                Group group = opt.get();
-                group.addStudent(student);
-                student.setGroup(group);
+                Optional<Group> group = groupDao.findById(groupId);
+                group.ifPresent(student::setGroup);
 
                 return Optional.of(student);
             }
