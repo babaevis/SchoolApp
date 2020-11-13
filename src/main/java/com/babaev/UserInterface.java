@@ -1,7 +1,6 @@
 package com.babaev;
 
 import com.babaev.dao.CrudDao;
-import com.babaev.dao.GroupDaoImpl;
 import com.babaev.dao.StudentDaoImpl;
 import com.babaev.model.Group;
 import com.babaev.model.Student;
@@ -10,6 +9,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.lang.System.*;
 
 /**
  * @author Islam Babaev
@@ -20,7 +21,7 @@ public class UserInterface {
 
     public UserInterface(Connection con) {
         this.con = con;
-        scanner = new Scanner(System.in);
+        scanner = new Scanner(in);
     }
 
     public void runInterface() {
@@ -55,13 +56,18 @@ public class UserInterface {
     }
 
     private void printMenu() {
-        System.out.println("\n                     MAIN MENU\n" +
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        out.println("\n\n\n                     MAIN MENU\n" +
                             "=====================================================");
-        System.out.println("1.Show all students");
-        System.out.println("2.Add new student");
-        System.out.println("3.Delete student by id");
-        System.out.println("0.EXIT");
-        System.out.println("--> Enter 1-4 to select operation. '0' to exit <--");
+        out.println("1.Show all students");
+        out.println("2.Add new student");
+        out.println("3.Delete student by id");
+        out.println("0.EXIT");
+        out.println("--> Enter 1-4 to select operation. '0' to exit <--");
     }
 
     private void findStudents() {
@@ -72,17 +78,16 @@ public class UserInterface {
 
     private void addNewStudent() {
         Student student = new Student();
-        CrudDao studentDao = new StudentDaoImpl(con);
-        CrudDao groupDao = new GroupDaoImpl(con);
+        CrudDao<Student, Integer> studentDao = new StudentDaoImpl(con);
 
-        System.out.println("Enter first name of new student:");
-        String firstName = scanName();
-        System.out.println("Enter last name of new student:");
-        String lastName = scanName();
-        System.out.println("Enter patronimyc of new student");
-        String patronimyc = scanName();
-        System.out.println("Enter group id of new student");
-        int grouId = scanNumber();
+        out.println("Enter first name of new student:");
+        String firstName = scanner.next();
+        out.println("Enter last name of new student:");
+        String lastName = scanner.next();
+        out.println("Enter patronimyc of new student");
+        String patronimyc = scanner.next();
+        out.println("Enter group id of new student");
+        int grouId = scanner.nextInt();
 
         Group group = new Group();
         group.setId(grouId);
@@ -93,46 +98,45 @@ public class UserInterface {
         student.setPatronimyc(patronimyc);
         studentDao.save(student);
 
-        System.out.println("-------------------------");
-        System.out.println(lastName + " " + firstName + " " + patronimyc + " added");
-        System.out.println("-------------------------");
+        out.println("-------------------------");
+        out.println(lastName + " " + firstName + " " + patronimyc + " added");
+        out.println("-------------------------");
     }
 
     private void printStudents(List<Student> students) {
-        if (students.isEmpty()) {
-            System.out.println("--------------------------");
-            System.out.println("       No students");
-            System.out.println("--------------------------");
-
-        } else {
-            System.out.println("--------------------------------------------");
-            System.out.println("Firstname | Lastname | Patronymic | Group_id");
-            System.out.println("--------------------------------------------");
-
-            for (int i = 0; i < students.size(); i++) {
-                System.out.print(i + 1 + ". " + students.get(i).getFirstName() + "     ");
-                System.out.print(students.get(i).getLastName()+ "   ");
-                System.out.print(students.get(i).getPatronimyc() + "     ");
-                System.out.println(students.get(i).getGroup().getId());
-            }
+                if (students.isEmpty()) {
+            out.println("--------------------------");
+            out.println("       No students");
+            out.println("--------------------------");
+            return;
         }
+
+        StringBuilder result = new StringBuilder();
+        result.append(String.format("%-5s", "Id"));
+        result.append(String.format("%-10s", "Group Id"));
+        result.append(String.format("%-25s", "Last Name"));
+        result.append(String.format("%-25s", "First Name"));
+        result.append(String.format("%-25s", "Patronymic"));
+        result.append("\n");
+
+            students.forEach( student -> {
+                result.append(String.format("%-5s", student.getId()));
+                result.append(String.format("%-10s", student.getGroup().getId()));
+                result.append(String.format("%-25s", student.getLastName()));
+                result.append(String.format("%-25s", student.getFirstName()));
+                result.append(String.format("%-25s", student.getPatronimyc()));
+                result.append("\n");
+            });
+            out.println(result.toString());
     }
 
     private void deleteStudentById(){
-            System.out.println("Enter the id of the student:");
-            int id = scanNumber();
+            out.println("Enter id of the student:");
+            int id = scanner.nextInt();
 
             StudentDaoImpl studentDao = new StudentDaoImpl(con);
             studentDao.deleteById(id);
 
-            System.out.println("Student successfully deleted\n----------------------------");
-    }
-
-    private String scanName(){
-        return scanner.next();
-    }
-
-    private int scanNumber(){
-        return scanner.nextInt();
+            out.println("Student successfully deleted\n----------------------------");
     }
 }

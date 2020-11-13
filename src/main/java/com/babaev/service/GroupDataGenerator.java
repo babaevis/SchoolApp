@@ -9,6 +9,10 @@ import java.util.List;
  * @author Islam Babaev
  */
 public class GroupDataGenerator {
+    private GroupDataGenerator(){
+
+    }
+
     public static List<Group> generateGroups(){
         List<Group> groups = new ArrayList<>();
         StringBuilder sb = new StringBuilder();

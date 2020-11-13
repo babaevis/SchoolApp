@@ -34,7 +34,7 @@ public class Main {
     }
 
     private static void saveGeneratedData(List<Group> groups, Connection con){
-        CrudDao groupDao = new GroupDaoImpl(con);
+        CrudDao<Group, Integer> groupDao = new GroupDaoImpl(con);
         groups.forEach(groupDao::save);
     }
 }
