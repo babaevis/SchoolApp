@@ -86,11 +86,14 @@ public class UserInterface {
         String lastName = scanner.next();
         out.println("Enter patronimyc of new student");
         String patronimyc = scanner.next();
-        out.println("Enter group id of new student");
-        int grouId = scanner.nextInt();
-
+        String userAnswer = null;
         Group group = new Group();
-        group.setId(grouId);
+        while (!(isValid(userAnswer) && Integer.parseInt(userAnswer) <= 10)){
+            out.println("Enter group id of new student");
+            userAnswer = scanner.next();
+        }
+
+        group.setId(Integer.parseInt(userAnswer));
 
         student.setGroup(group);
         student.setFirstName(firstName);
@@ -104,7 +107,7 @@ public class UserInterface {
     }
 
     private void printStudents(List<Student> students) {
-                if (students.isEmpty()) {
+        if (students.isEmpty()) {
             out.println("--------------------------");
             out.println("       No students");
             out.println("--------------------------");
@@ -114,29 +117,41 @@ public class UserInterface {
         StringBuilder result = new StringBuilder();
         result.append(String.format("%-5s", "Id"));
         result.append(String.format("%-10s", "Group Id"));
-        result.append(String.format("%-25s", "Last Name"));
-        result.append(String.format("%-25s", "First Name"));
+        result.append(String.format("%-20s", "Last Name"));
+        result.append(String.format("%-20s", "First Name"));
         result.append(String.format("%-25s", "Patronymic"));
         result.append("\n");
 
-            students.forEach( student -> {
-                result.append(String.format("%-5s", student.getId()));
-                result.append(String.format("%-10s", student.getGroup().getId()));
-                result.append(String.format("%-25s", student.getLastName()));
-                result.append(String.format("%-25s", student.getFirstName()));
-                result.append(String.format("%-25s", student.getPatronimyc()));
-                result.append("\n");
-            });
-            out.println(result.toString());
+        students.forEach( student -> {
+            result.append(String.format("%-5s", student.getId()));
+            result.append(String.format("%-10s", student.getGroup().getId()));
+            result.append(String.format("%-20s", student.getLastName()));
+            result.append(String.format("%-20s", student.getFirstName()));
+            result.append(String.format("%-25s", student.getPatronimyc()));
+            result.append("\n");
+        });
+        out.println(result.toString());
     }
 
     private void deleteStudentById(){
+        String userAnswer = null;
+        while(!(isValid(userAnswer))){
             out.println("Enter id of the student:");
-            int id = scanner.nextInt();
+            userAnswer = scanner.next();
+        }
+        StudentDaoImpl studentDao = new StudentDaoImpl(con);
+        studentDao.deleteById(Integer.parseInt(userAnswer));
 
-            StudentDaoImpl studentDao = new StudentDaoImpl(con);
-            studentDao.deleteById(id);
+        out.println("Student #" + userAnswer + " successfully deleted\n----------------------------");
+    }
 
-            out.println("Student successfully deleted\n----------------------------");
+    private boolean isValid(String str){
+        if(str == null)
+            return false;
+        for(int i = 0; i < str.length(); i++){
+            if (!(str.charAt(i) >= '0' && str.charAt(i) <= '9'))
+                return false;
+        }
+        return Integer.parseInt(str) > 0;
     }
 }
