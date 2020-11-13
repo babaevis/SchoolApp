@@ -15,21 +15,23 @@ import java.util.Set;
  * @author Islam Babaev
  */
 public class GroupDaoImpl implements CrudDao<Group, Integer> {
-    private final Connection con;
     private PreparedStatement statement;
     private ResultSet rs;
+    private final Connection con;
+    private final String FIND_QUERY = "SELECT * FROM groups WHERE group_id = ?";
+    private final String UPDATE_QUERY = "UPDATE groups SET group_name = ? WHERE group_id = ?";
+    private final String SAVE_QUERY = "INSERT INTO groups (group_name) VALUES (?)";
+    private final String DELETE_QUERY = "DELETE FROM groups WHERE group_id = ?";
+    private final String FINDALL_QUERY = "SELECT * FROM groups";
 
     public GroupDaoImpl(Connection con) {
         this.con = con;
     }
 
-
     @Override
     public Optional<Group> findById(Integer id) {
-        String query = "SELECT * FROM groups WHERE group_id = ?";
-
         try {
-            statement = con.prepareStatement(query);
+            statement = con.prepareStatement(FIND_QUERY);
             statement.setInt(1, id);
             rs = statement.executeQuery();
 
@@ -49,10 +51,8 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
 
     @Override
     public void save(Group group) {
-        String query = "INSERT INTO groups (group_name) VALUES (?)";
-
         try {
-            statement = con.prepareStatement(query);
+            statement = con.prepareStatement(SAVE_QUERY);
             statement.setString(1, group.getName());
             statement.executeUpdate();
         } catch (SQLException throwables) {
@@ -62,10 +62,8 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
 
     @Override
     public void update(Group group) {
-        String query = "UPDATE groups SET group_name = ? WHERE group_id = ?";
-
         try {
-            statement = con.prepareStatement(query);
+            statement = con.prepareStatement(UPDATE_QUERY);
             statement.setString(1, group.getName());
             statement.setInt(2, (int)group.getId());
             statement.executeUpdate();
@@ -76,10 +74,8 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
 
     @Override
     public void deleteById(Integer id) {
-        String query = "DELETE FROM groups WHERE group_id = ?";
-
         try {
-            statement = con.prepareStatement(query);
+            statement = con.prepareStatement(DELETE_QUERY);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException throwables) {
@@ -94,11 +90,9 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
 
     @Override
     public List<Group> findAll() {
-        String select = "SELECT * FROM students";
         List<Group> groups = new ArrayList<>();
-
         try {
-            statement = con.prepareStatement(select);
+            statement = con.prepareStatement(FINDALL_QUERY);
             rs = statement.executeQuery();
 
             while (rs.next()) {
