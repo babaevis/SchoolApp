@@ -15,6 +15,7 @@ import java.util.List;
  * @author Islam Babaev
  */
 public class Main {
+private static final String SCRIPT = "src/main/resources/tables.sql";
 
     public static void main(String[] args) {
         Connection con = ConnectionProvider.getConnection();
@@ -25,15 +26,15 @@ public class Main {
     }
 
     private static void makeInitialSetup(Connection con){
-        File tables = new File("src/main/resources/tables.sql");
+        File tables = new File(SCRIPT);
         SqlScriptRunner sqlScriptRunner = new SqlScriptRunner(tables, con);
 
         sqlScriptRunner.runScript();
         List<Group> groups = GroupDataGenerator.generateGroups();
-        saveGeneratedData(groups, con);
+        saveGroups(groups, con);
     }
 
-    private static void saveGeneratedData(List<Group> groups, Connection con){
+    private static void saveGroups(List<Group> groups, Connection con){
         CrudDao<Group, Integer> groupDao = new GroupDaoImpl(con);
         groups.forEach(groupDao::save);
     }

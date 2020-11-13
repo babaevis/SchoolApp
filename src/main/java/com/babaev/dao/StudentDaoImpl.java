@@ -118,9 +118,9 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
                 student.setLastName(rs.getString("last_name"));
                 student.setBirthdate(rs.getDate("birth_date"));
                 student.setPatronimyc(rs.getString("patronymic"));
-                CrudDao groupDao = new GroupDaoImpl(con);
+                CrudDao<Group, Integer> groupDao = new GroupDaoImpl(con);
                 Optional<Group> group = groupDao.findById(rs.getInt("group_id"));
-                student.setGroup(group.get());
+                group.ifPresent(student::setGroup);
                 students.add(student);
             }
         } catch (SQLException throwables) {
