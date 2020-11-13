@@ -16,24 +16,17 @@ private static final String SCRIPT = "src/main/resources/tables.sql";
 
     public static void main(String[] args) {
         Connection con = ConnectionProvider.getConnection();
-        makeInitialSetup(con);
-
-        UserInterface uI = new UserInterface(con);
-        uI.runInterface();
-    }
-
-    private static void makeInitialSetup(Connection con){
         File tables = new File(SCRIPT);
+
         SqlScriptRunner sqlScriptRunner = new SqlScriptRunner(tables, con);
         sqlScriptRunner.runScript();
 
         List<Group> groups = GroupDataGenerator.generateGroups();
-        saveGroups(groups, con);
-    }
-
-    private static void saveGroups(List<Group> groups, Connection con){
         CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
         groups.forEach(groupDao::save);
+
+        UserInterface uI = new UserInterface(con);
+        uI.runInterface();
     }
 }
 
