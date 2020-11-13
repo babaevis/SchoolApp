@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * @author Islam Babaev
  */
-public class StudentDaoImpl implements CrudDao<Student, Integer> {
+public class StudentDaoImpl implements CrudDao<Student, Long> {
     private PreparedStatement statement;
     private ResultSet rs;
     private final Connection con;
@@ -28,10 +28,10 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
     }
 
     @Override
-    public Optional<Student> findById(Integer id) {
+    public Optional<Student> findById(Long id) {
         try {
             statement = con.prepareStatement(FIND_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             rs = statement.executeQuery();
 
             if (rs.next()){
@@ -42,7 +42,9 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
                 long groupId = rs.getLong("group_id");
 
                 Student student = new Student(id, firstname, lastname, patronimyc, birthdate);
-                Group group = new Group(groupId);
+                GroupDaoImpl groupDao = new GroupDaoImpl(con);
+                Optional<Group> opt = groupDao.findById(groupId);
+                Group group = opt.get();
                 group.addStudent(student);
                 student.setGroup(group);
 
@@ -62,7 +64,7 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
             statement.setString(2, student.getLastName());
             statement.setString(3, student.getPatronimyc());
             statement.setDate(4, student.getBirthdate());
-            statement.setInt(5, (int)student.getGroup().getId());
+            statement.setLong(5, student.getGroup().getId());
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -76,8 +78,8 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
             statement.setString(2, student.getLastName());
             statement.setString(3, student.getPatronimyc());
             statement.setDate(4, student.getBirthdate());
-            statement.setInt(5, (int)student.getGroup().getId());
-            statement.setInt(6, (int)student.getId());
+            statement.setLong(5, student.getGroup().getId());
+            statement.setLong(6, student.getId());
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -85,10 +87,10 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         try {
             statement = con.prepareStatement(DELETE_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -97,7 +99,7 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
     }
 
     @Override
-    public void deleteAllByIds(Set<Integer> ids) {
+    public void deleteAllByIds(Set<Long> ids) {
         ids.forEach(this::deleteById);
     }
 
@@ -115,8 +117,8 @@ public class StudentDaoImpl implements CrudDao<Student, Integer> {
                 student.setLastName(rs.getString("last_name"));
                 student.setBirthdate(rs.getDate("birth_date"));
                 student.setPatronimyc(rs.getString("patronymic"));
-                CrudDao<Group, Integer> groupDao = new GroupDaoImpl(con);
-                Optional<Group> group = groupDao.findById(rs.getInt("group_id"));
+                CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
+                Optional<Group> group = groupDao.findById(rs.getLong("group_id"));
                 group.ifPresent(student::setGroup);
                 students.add(student);
             }

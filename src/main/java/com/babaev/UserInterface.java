@@ -6,7 +6,10 @@ import com.babaev.model.Group;
 import com.babaev.model.Student;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Scanner;
 
@@ -78,7 +81,7 @@ public class UserInterface {
 
     private void addNewStudent() {
         Student student = new Student();
-        CrudDao<Student, Integer> studentDao = new StudentDaoImpl(con);
+        CrudDao<Student, Long> studentDao = new StudentDaoImpl(con);
 
         out.println("Enter first name of new student:");
         String firstName = scanner.next();
@@ -86,24 +89,34 @@ public class UserInterface {
         String lastName = scanner.next();
         out.println("Enter patronimyc of new student");
         String patronimyc = scanner.next();
-        String userAnswer = null;
-        Group group = new Group();
-        while (!(isValid(userAnswer) && Integer.parseInt(userAnswer) <= 10)){
+
+        String groupId = null;
+        while (!(isValid(groupId) && Integer.parseInt(groupId) <= 10)){
             out.println("Enter group id of new student");
-            userAnswer = scanner.next();
+            groupId = scanner.next();
         }
 
-        group.setId(Integer.parseInt(userAnswer));
-
+        out.println("Enter birthdate of new student in dd/MM/yyyy format");
+        java.util.Date utilDate = null;
+        try {
+            utilDate = new SimpleDateFormat("dd/MM/yyyy").parse(scanner.next());
+        } catch (ParseException e) {
+            out.println("\n\n-------->Invalid date format<-------");
+            e.printStackTrace();
+        }
+        Date birthdate = new java.sql.Date(utilDate.getTime());
+        Group group = new Group();
+        group.setId(Integer.parseInt(groupId));
+        student.setBirthdate(birthdate);
         student.setGroup(group);
         student.setFirstName(firstName);
         student.setLastName(lastName);
         student.setPatronimyc(patronimyc);
         studentDao.save(student);
 
-        out.println("-------------------------");
-        out.println(lastName + " " + firstName + " " + patronimyc + " added");
-        out.println("-------------------------");
+        out.println("-----------------------------------");
+        out.println(lastName + " " + firstName + " " + patronimyc + " " + birthdate);
+        out.println("-----------------------------------");
     }
 
     private void printStudents(List<Student> students) {
@@ -120,6 +133,7 @@ public class UserInterface {
         result.append(String.format("%-20s", "Last Name"));
         result.append(String.format("%-20s", "First Name"));
         result.append(String.format("%-25s", "Patronymic"));
+        result.append(String.format("%-10s", "Birthdate"));
         result.append("\n");
 
         students.forEach( student -> {
@@ -128,6 +142,7 @@ public class UserInterface {
             result.append(String.format("%-20s", student.getLastName()));
             result.append(String.format("%-20s", student.getFirstName()));
             result.append(String.format("%-25s", student.getPatronimyc()));
+            result.append(String.format("%-10s", student.getBirthdate()));
             result.append("\n");
         });
         out.println(result.toString());
@@ -140,7 +155,7 @@ public class UserInterface {
             userAnswer = scanner.next();
         }
         StudentDaoImpl studentDao = new StudentDaoImpl(con);
-        studentDao.deleteById(Integer.parseInt(userAnswer));
+        studentDao.deleteById(Long.parseLong(userAnswer));
 
         out.println("Student #" + userAnswer + " successfully deleted\n----------------------------");
     }

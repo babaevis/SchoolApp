@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * @author Islam Babaev
  */
-public class GroupDaoImpl implements CrudDao<Group, Integer> {
+public class GroupDaoImpl implements CrudDao<Group, Long> {
     private PreparedStatement statement;
     private ResultSet rs;
     private final Connection con;
@@ -29,10 +29,10 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
     }
 
     @Override
-    public Optional<Group> findById(Integer id) {
+    public Optional<Group> findById(Long id) {
         try {
             statement = con.prepareStatement(FIND_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             rs = statement.executeQuery();
 
             if(rs.next()){
@@ -65,7 +65,7 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
         try {
             statement = con.prepareStatement(UPDATE_QUERY);
             statement.setString(1, group.getName());
-            statement.setInt(2, (int)group.getId());
+            statement.setLong(2, group.getId());
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -73,10 +73,10 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(Long id) {
         try {
             statement = con.prepareStatement(DELETE_QUERY);
-            statement.setInt(1, id);
+            statement.setLong(1, id);
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -84,7 +84,7 @@ public class GroupDaoImpl implements CrudDao<Group, Integer> {
     }
 
     @Override
-    public void deleteAllByIds(Set<Integer> ids) {
+    public void deleteAllByIds(Set<Long> ids) {
         ids.forEach(this::deleteById);
     }
 

@@ -20,7 +20,6 @@ private static final String SCRIPT = "src/main/resources/tables.sql";
     public static void main(String[] args) {
         Connection con = ConnectionProvider.getConnection();
         makeInitialSetup(con);
-
         UserInterface uI = new UserInterface(con);
         uI.runInterface();
     }
@@ -35,7 +34,7 @@ private static final String SCRIPT = "src/main/resources/tables.sql";
     }
 
     private static void saveGroups(List<Group> groups, Connection con){
-        CrudDao<Group, Integer> groupDao = new GroupDaoImpl(con);
+        CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
         groups.forEach(groupDao::save);
     }
 }
