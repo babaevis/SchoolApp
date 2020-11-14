@@ -9,16 +9,15 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionProvider {
-    private static final String PROPERTY_PATH = "src/main/resources/db.properties";
     private static String url;
     private static String user;
     private static String password;
 
     private ConnectionProvider(){}
 
-    public static Connection getConnection(){
+    public static Connection getConnection(String path){
         Connection con = null;
-        loadProperty();
+        loadProperty(path);
         try {
             con = DriverManager.getConnection(url, user, password);
         } catch (SQLException throwables) {
@@ -27,8 +26,8 @@ public class ConnectionProvider {
         return con;
     }
 
-    private static void loadProperty(){
-        try (InputStream input = new FileInputStream(PROPERTY_PATH)) {
+    private static void loadProperty(String path){
+        try (InputStream input = new FileInputStream(path)) {
             Properties prop = new Properties();
             prop.load(input);
 
