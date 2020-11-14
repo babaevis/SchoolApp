@@ -12,13 +12,10 @@ import java.sql.Connection;
 import java.util.List;
 
 class Main {
-    private static final String URL = "jdbc:postgresql://localhost:5432/";
-    private static final String USERNAME = "postgres";
-    private static final String PASSWORD = "123";
     private static final String SCRIPT = "src/main/resources/tables.sql";
 
     public static void main(String[] args) {
-        Connection con = ConnectionProvider.getConnection(URL, USERNAME, PASSWORD);
+        Connection con = ConnectionProvider.getConnection();
         SqlScriptRunner.runScript(new File(SCRIPT), con);
 
         List<Group> groups = GroupDataGenerator.generateGroups();
@@ -28,4 +25,5 @@ class Main {
         UserInterface.runInterface(con);
     }
 }
+
 
