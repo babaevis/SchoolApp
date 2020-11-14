@@ -8,10 +8,7 @@ public class ConnectionProvider {
 
     private ConnectionProvider(){}
 
-    public static Connection getConnection(){
-        String url = "jdbc:postgresql://localhost:5432/";
-        String username = "postgres";
-        String password = "123";
+    public static Connection getConnection(String url, String username, String password){
         Connection con = null;
 
         try {
