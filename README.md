@@ -1,4 +1,4 @@
-# test
+# Students
 
 There is a relational database. Add table about
 students, which will contain: name, surname, patronymic,birthdate, group, id.
