@@ -57,7 +57,7 @@ public class StudentDaoImpl implements CrudDao<Student, Long> {
             statement = con.prepareStatement(SAVE_QUERY);
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
-            statement.setString(3, student.getPatronimyc());
+            statement.setString(3, student.getPatronymic());
             statement.setDate(4, student.getBirthdate());
             statement.setLong(5, student.getGroup().getId());
             statement.executeUpdate();
@@ -71,7 +71,7 @@ public class StudentDaoImpl implements CrudDao<Student, Long> {
             statement = con.prepareStatement(UPDATE_QUERY);
             statement.setString(1, student.getFirstName());
             statement.setString(2, student.getLastName());
-            statement.setString(3, student.getPatronimyc());
+            statement.setString(3, student.getPatronymic());
             statement.setDate(4, student.getBirthdate());
             statement.setLong(5, student.getGroup().getId());
             statement.setLong(6, student.getId());
@@ -111,7 +111,7 @@ public class StudentDaoImpl implements CrudDao<Student, Long> {
                 student.setFirstName(rs.getString("first_name"));
                 student.setLastName(rs.getString("last_name"));
                 student.setBirthdate(rs.getDate("birth_date"));
-                student.setPatronimyc(rs.getString("patronymic"));
+                student.setPatronymic(rs.getString("patronymic"));
                 CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
                 Optional<Group> group = groupDao.findById(rs.getLong("group_id"));
                 group.ifPresent(student::setGroup);

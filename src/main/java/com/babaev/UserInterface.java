@@ -84,8 +84,8 @@ class UserInterface {
         String firstName = scanner.next();
         out.println("Enter last name of new student:");
         String lastName = scanner.next();
-        out.println("Enter patronimyc of new student");
-        String patronimyc = scanner.next();
+        out.println("Enter patronymic of new student");
+        String patronymic = scanner.next();
 
         String groupId = null;
         while (!(isValid(groupId) && Integer.parseInt(groupId) <= 10)){
@@ -108,11 +108,11 @@ class UserInterface {
         student.setGroup(group);
         student.setFirstName(firstName);
         student.setLastName(lastName);
-        student.setPatronimyc(patronimyc);
+        student.setPatronymic(patronymic);
         studentDao.save(student);
 
         out.println("-----------------------------------");
-        out.println(lastName + " " + firstName + " " + patronimyc + " " + birthdate);
+        out.println(lastName + " " + firstName + " " + patronymic + " " + birthdate);
         out.println("-----------------------------------");
     }
 
@@ -138,7 +138,7 @@ class UserInterface {
             result.append(String.format("%-10s", student.getGroup().getId()));
             result.append(String.format("%-20s", student.getLastName()));
             result.append(String.format("%-20s", student.getFirstName()));
-            result.append(String.format("%-25s", student.getPatronimyc()));
+            result.append(String.format("%-25s", student.getPatronymic()));
             result.append(String.format("%-10s", student.getBirthdate()));
             result.append("\n");
         });

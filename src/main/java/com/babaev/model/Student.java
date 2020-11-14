@@ -7,18 +7,18 @@ public class Student {
     private long id;
     private String firstName;
     private String lastName;
-    private String patronimyc;
+    private String patronymic;
     private Group group;
     private Date birthdate;
 
     public Student() {
     }
 
-    public Student(long id, String firstName, String lastName, String patronimyc, Date birthdate) {
+    public Student(long id, String firstName, String lastName, String patronymic, Date birthdate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.patronimyc = patronimyc;
+        this.patronymic = patronymic;
         this.birthdate = birthdate;
     }
 
@@ -46,12 +46,12 @@ public class Student {
         this.lastName = lastName;
     }
 
-    public String getPatronimyc() {
-        return patronimyc;
+    public String getPatronymic() {
+        return patronymic;
     }
 
-    public void setPatronimyc(String patronimyc) {
-        this.patronimyc = patronimyc;
+    public void setPatronymic(String patronimyc) {
+        this.patronymic = patronimyc;
     }
 
     public Group getGroup() {
