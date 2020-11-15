@@ -1,6 +1,7 @@
 package com.babaev;
 
 import com.babaev.dao.CrudDao;
+import com.babaev.dao.GroupDaoImpl;
 import com.babaev.dao.StudentDaoImpl;
 import com.babaev.model.Group;
 import com.babaev.model.Student;
@@ -43,6 +44,9 @@ class UserInterface {
                 case "3":
                     deleteStudentById();
                     break;
+                case "4":
+                    findGroups();
+                    break;
                 default:
                     break;
             }
@@ -66,6 +70,7 @@ class UserInterface {
         out.println("1.Show all students");
         out.println("2.Add new student");
         out.println("3.Delete student by id");
+        out.println("4.Show groups");
         out.println("0.EXIT");
         out.println("--> Enter 1-4 to select operation. '0' to exit <--");
     }
@@ -76,6 +81,23 @@ class UserInterface {
         printStudents(students);
     }
 
+    private static void findGroups(){
+        CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
+        List<Group> groups = groupDao.findAll();
+        printGroups(groups);
+    }
+
+    private static void printGroups(List<Group> groups){
+        StringBuilder result = new StringBuilder();
+        result.append(" Id").append("        Group");
+        result.append("\n");
+        groups.forEach(group -> {
+            result.append(String.format("%2s", group.getId()));
+            result.append(String.format("%14s", group.getName()));
+            result.append("\n");
+        });
+        out.println(result);
+    }
     private static void addNewStudent() {
         Student student = new Student();
         CrudDao<Student, Long> studentDao = new StudentDaoImpl(con);
