@@ -17,8 +17,8 @@ import java.util.Scanner;
 import static java.lang.System.*;
 
 class UserInterface {
-    private static Scanner scanner;
-    private static Connection con;
+    private final Scanner scanner;
+    private final Connection con;
 
     public UserInterface(Connection connection){
         con = connection;
