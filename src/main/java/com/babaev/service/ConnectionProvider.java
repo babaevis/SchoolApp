@@ -43,6 +43,5 @@ public class ConnectionProvider {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
     }
 }

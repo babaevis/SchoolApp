@@ -27,18 +27,13 @@ public class SqlScriptRunner {
         }
 
         BufferedReader br;
-        String line;
-
         try (FileReader fr = new FileReader(script)){
             br = new BufferedReader(fr);
-
-            line = br.readLine();
-
+            String line = br.readLine();
             while (line != null) {
                 executeQuery(line);
                 line = br.readLine();
             }
-
             br.close();
         } catch (IOException throwables) {
             throwables.printStackTrace();
@@ -46,8 +41,7 @@ public class SqlScriptRunner {
     }
 
     private static void executeQuery(String query){
-        Statement statement = null;
-
+        Statement statement;
         try {
             statement = con.createStatement();
             statement.execute(query);
