@@ -71,7 +71,7 @@ class UserInterface {
     }
 
     private static void findStudents() {
-        StudentDaoImpl studentDao = new StudentDaoImpl(con);
+        CrudDao<Student, Long> studentDao = new StudentDaoImpl(con);
         List<Student> students = studentDao.findAll();
         printStudents(students);
     }
@@ -151,7 +151,7 @@ class UserInterface {
             out.println("Enter id of the student:");
             userAnswer = scanner.next();
         }
-        StudentDaoImpl studentDao = new StudentDaoImpl(con);
+        CrudDao<Student, Long> studentDao = new StudentDaoImpl(con);
         studentDao.deleteById(Long.parseLong(userAnswer));
 
         out.println("Student #" + userAnswer + " successfully deleted\n----------------------------");

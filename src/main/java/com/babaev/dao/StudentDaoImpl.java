@@ -39,7 +39,7 @@ public class StudentDaoImpl implements CrudDao<Student, Long> {
                 long groupId = rs.getLong("group_id");
 
                 Student student = new Student(id, firstname, lastname, patronimyc, birthdate);
-                GroupDaoImpl groupDao = new GroupDaoImpl(con);
+                CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
                 Optional<Group> group = groupDao.findById(groupId);
                 group.ifPresent(student::setGroup);
 
