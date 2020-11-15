@@ -20,14 +20,13 @@ class UserInterface {
     private static Scanner scanner;
     private static Connection con;
 
-    private UserInterface(){
-    }
-
-    public static void runInterface(Connection connection) {
+    public UserInterface(Connection connection){
         con = connection;
         scanner = new Scanner(in);
-        boolean exit = false;
+    }
 
+    public void runInterface() {
+        boolean exit = false;
         while (!exit) {
             printMenu();
 
@@ -59,7 +58,7 @@ class UserInterface {
         }
     }
 
-    private static void printMenu() {
+    private void printMenu() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -75,19 +74,19 @@ class UserInterface {
         out.println("--> Enter 1-4 to select operation. '0' to exit <--");
     }
 
-    private static void findStudents() {
+    private void findStudents() {
         CrudDao<Student, Long> studentDao = new StudentDaoImpl(con);
         List<Student> students = studentDao.findAll();
         printStudents(students);
     }
 
-    private static void findGroups(){
+    private void findGroups(){
         CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
         List<Group> groups = groupDao.findAll();
         printGroups(groups);
     }
 
-    private static void printGroups(List<Group> groups){
+    private void printGroups(List<Group> groups){
         StringBuilder result = new StringBuilder();
         result.append(" Id").append("        Group");
         result.append("\n");
@@ -98,8 +97,8 @@ class UserInterface {
         });
         out.println(result);
     }
-    private static void addNewStudent() {
-        Student student = new Student();
+
+    private void addNewStudent() {
         CrudDao<Student, Long> studentDao = new StudentDaoImpl(con);
 
         out.println("Enter first name of new student:");
@@ -126,11 +125,7 @@ class UserInterface {
         Date birthdate = new java.sql.Date(utilDate.getTime());
         Group group = new Group();
         group.setId(Integer.parseInt(groupId));
-        student.setBirthdate(birthdate);
-        student.setGroup(group);
-        student.setFirstName(firstName);
-        student.setLastName(lastName);
-        student.setPatronymic(patronymic);
+        Student student = new Student(firstName, lastName, patronymic, birthdate,group);
         studentDao.save(student);
 
         out.println("-----------------------------------");
@@ -138,7 +133,7 @@ class UserInterface {
         out.println("-----------------------------------");
     }
 
-    private static void printStudents(List<Student> students) {
+    private void printStudents(List<Student> students) {
         if (students.isEmpty()) {
             out.println("--------------------------");
             out.println("       No students");
@@ -167,7 +162,7 @@ class UserInterface {
         out.println(result.toString());
     }
 
-    private static void deleteStudentById(){
+    private void deleteStudentById(){
         String userAnswer = null;
         while(!(isValid(userAnswer))){
             out.println("Enter id of the student:");
@@ -179,7 +174,7 @@ class UserInterface {
         out.println("Student #" + userAnswer + " successfully deleted\n----------------------------");
     }
 
-    private static boolean isValid(String str){
+    private boolean isValid(String str){
         if(str == null)
             return false;
         for(int i = 0; i < str.length(); i++){

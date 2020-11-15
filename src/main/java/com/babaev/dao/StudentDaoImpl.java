@@ -38,7 +38,7 @@ public class StudentDaoImpl implements CrudDao<Student, Long> {
                 Date birthdate = rs.getDate("birth_date");
                 long groupId = rs.getLong("group_id");
 
-                Student student = new Student(id, firstname, lastname, patronimyc, birthdate);
+                Student student = new Student(firstname, lastname, patronimyc, birthdate);
                 CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
                 Optional<Group> group = groupDao.findById(groupId);
                 group.ifPresent(student::setGroup);

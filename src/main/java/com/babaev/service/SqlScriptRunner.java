@@ -9,20 +9,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class SqlScriptRunner {
-    private static Connection con;
-
     private SqlScriptRunner(){
     }
 
     public static void runScript(File script, Connection connection) {
-        con = connection;
         if(!script.exists()) {
             throw new IllegalArgumentException("File not found");
         }
         if(script.length() == 0) {
             throw new IllegalArgumentException("File is empty");
         }
-        if(con == null){
+        if(connection == null){
             throw new IllegalArgumentException("Bad connection");
         }
 
@@ -30,23 +27,14 @@ public class SqlScriptRunner {
         try (FileReader fr = new FileReader(script)){
             br = new BufferedReader(fr);
             String line = br.readLine();
+            Statement statement = connection.createStatement();
             while (line != null) {
-                executeQuery(line);
+                statement.execute(line);
                 line = br.readLine();
             }
             br.close();
-        } catch (IOException throwables) {
-            throwables.printStackTrace();
-        }
-    }
-
-    private static void executeQuery(String query){
-        Statement statement;
-        try {
-            statement = con.createStatement();
-            statement.execute(query);
             statement.close();
-        } catch (SQLException throwables) {
+        } catch (IOException | SQLException throwables) {
             throwables.printStackTrace();
         }
     }
