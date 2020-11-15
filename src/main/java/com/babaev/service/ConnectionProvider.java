@@ -1,5 +1,6 @@
 package com.babaev.service;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,9 +16,14 @@ public class ConnectionProvider {
 
     private ConnectionProvider(){}
 
-    public static Connection getConnection(String path){
+    public static Connection getConnection(File file){
+        if(!file.exists())
+            throw new IllegalArgumentException("Invalid property path");
+        if(file.length() == 0)
+            throw new IllegalArgumentException("Property is empty");
+
         Connection con = null;
-        loadProperty(path);
+        loadProperty(file);
         try {
             con = DriverManager.getConnection(url, user, password);
         } catch (SQLException throwables) {
@@ -26,8 +32,8 @@ public class ConnectionProvider {
         return con;
     }
 
-    private static void loadProperty(String path){
-        try (InputStream input = new FileInputStream(path)) {
+    private static void loadProperty(File file){
+        try (InputStream input = new FileInputStream(file)) {
             Properties prop = new Properties();
             prop.load(input);
 

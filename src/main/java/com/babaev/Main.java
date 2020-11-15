@@ -16,7 +16,7 @@ class Main {
     private static final String PROPERTIES = "src/main/resources/db.properties";
 
     public static void main(String[] args) {
-        Connection con = ConnectionProvider.getConnection(PROPERTIES);
+        Connection con = ConnectionProvider.getConnection(new File(PROPERTIES));
         SqlScriptRunner.runScript(new File(SCRIPT), con);
 
         List<Group> groups = GroupDataGenerator.generateGroups();
@@ -26,5 +26,3 @@ class Main {
         UserInterface.runInterface(con);
     }
 }
-
-
