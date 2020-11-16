@@ -192,6 +192,12 @@ class UserInterface {
             return false;
         if (!(str.charAt(2) == '/' && str.charAt(5) == '/'))
             return false;
+        for (int i = 0; i < 10; i++){
+            if (i == 2 || i == 5)
+                continue;
+            if (!(str.charAt(i) >= '0' && str.charAt(i) <= '9'))
+                return false;
+        }
         if (Integer.parseInt(str.substring(0, 2)) > 31 || Integer.parseInt(str.substring(3, 5)) > 12)
             return false;
         if (Integer.parseInt(str.substring(6, 10)) < 1900 || Integer.parseInt(str.substring(6, 9)) > 2010)
