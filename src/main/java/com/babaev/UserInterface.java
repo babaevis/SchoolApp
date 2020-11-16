@@ -187,7 +187,7 @@ class UserInterface {
         return Integer.parseInt(str) > 0;
     }
 
-    private static boolean dateIsValid(String str) {
+    private boolean dateIsValid(String str) {
         if (str == null)
             return false;
         if (!(str.charAt(2) == '/' && str.charAt(5) == '/'))
