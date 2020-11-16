@@ -20,7 +20,7 @@ class UserInterface {
     private final Scanner scanner;
     private final Connection con;
 
-    public UserInterface(Connection connection){
+    public UserInterface(Connection connection) {
         con = connection;
         scanner = new Scanner(in);
     }
@@ -65,7 +65,7 @@ class UserInterface {
             e.printStackTrace();
         }
         out.println("\n\n\n                     MAIN MENU\n" +
-                            "=====================================================");
+                "=====================================================");
         out.println("1.Show all students");
         out.println("2.Add new student");
         out.println("3.Delete student by id");
@@ -80,13 +80,13 @@ class UserInterface {
         printStudents(students);
     }
 
-    private void findGroups(){
+    private void findGroups() {
         CrudDao<Group, Long> groupDao = new GroupDaoImpl(con);
         List<Group> groups = groupDao.findAll();
         printGroups(groups);
     }
 
-    private void printGroups(List<Group> groups){
+    private void printGroups(List<Group> groups) {
         StringBuilder result = new StringBuilder();
         result.append(" Id").append("        Group");
         result.append("\n");
@@ -109,23 +109,26 @@ class UserInterface {
         String patronymic = scanner.next();
 
         String groupId = null;
-        while (!(isValid(groupId) && Integer.parseInt(groupId) <= 10)){
+        while (!(isValid(groupId) && Integer.parseInt(groupId) <= 10)) {
             out.println("Enter group id of new student");
             groupId = scanner.next();
         }
 
-        out.println("Enter birthdate of new student in dd/MM/yyyy format");
         java.util.Date utilDate = null;
+        String date = null;
+        while(!dateIsValid(date)){
+            out.println("Enter birthdate of new student in dd/MM/yyyy format");
+            date = scanner.next();
+        }
         try {
-            utilDate = new SimpleDateFormat("dd/MM/yyyy").parse(scanner.next());
+            utilDate = new SimpleDateFormat("dd/MM/yyyy").parse(date);
         } catch (ParseException e) {
-            out.println("\n\n-------->Invalid date format<-------");
             e.printStackTrace();
         }
         Date birthdate = new java.sql.Date(utilDate.getTime());
         Group group = new Group();
         group.setId(Integer.parseInt(groupId));
-        Student student = new Student(firstName, lastName, patronymic, birthdate,group);
+        Student student = new Student(firstName, lastName, patronymic, birthdate, group);
         studentDao.save(student);
 
         out.println("-----------------------------------");
@@ -150,7 +153,7 @@ class UserInterface {
         result.append(String.format("%-10s", "Birthdate"));
         result.append("\n");
 
-        students.forEach( student -> {
+        students.forEach(student -> {
             result.append(String.format("%-5s", student.getId()));
             result.append(String.format("%-10s", student.getGroup().getId()));
             result.append(String.format("%-20s", student.getLastName()));
@@ -162,9 +165,9 @@ class UserInterface {
         out.println(result.toString());
     }
 
-    private void deleteStudentById(){
+    private void deleteStudentById() {
         String userAnswer = null;
-        while(!(isValid(userAnswer))){
+        while (!(isValid(userAnswer))) {
             out.println("Enter id of the student:");
             userAnswer = scanner.next();
         }
@@ -174,13 +177,25 @@ class UserInterface {
         out.println("Student #" + userAnswer + " successfully deleted\n----------------------------");
     }
 
-    private boolean isValid(String str){
-        if(str == null)
+    private boolean isValid(String str) {
+        if (str == null)
             return false;
-        for(int i = 0; i < str.length(); i++){
+        for (int i = 0; i < str.length(); i++) {
             if (!(str.charAt(i) >= '0' && str.charAt(i) <= '9'))
                 return false;
         }
         return Integer.parseInt(str) > 0;
+    }
+
+    private static boolean dateIsValid(String str) {
+        if (str == null)
+            return false;
+        if (!(str.charAt(2) == '/' && str.charAt(5) == '/'))
+            return false;
+        if (Integer.parseInt(str.substring(0, 2)) > 31 || Integer.parseInt(str.substring(3, 5)) > 12)
+            return false;
+        if (Integer.parseInt(str.substring(6, 10)) < 1900 || Integer.parseInt(str.substring(6, 9)) > 2010)
+            return false;
+        return true;
     }
 }
